@@ -1,9 +1,17 @@
 import { AppProps } from "next/app";
-
-function MyApp({ Component, pageProps }: AppProps) {
+import "@assets/main.css";
+const Noop: React.FC = ({ children }) => <>{children}</>;
+import React from "react";
+function MyApp({
+  Component,
+  pageProps,
+}: AppProps & { Component: { Layout: React.FC } }) {
+  const Layout = Component.Layout ?? Noop;
   return (
     <>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </>
   );
 }
