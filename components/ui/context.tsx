@@ -49,8 +49,6 @@ export const UIProvider: FC = ({ children }) => {
     };
   }, [state.isSidebarOpen]);
 
-  // const value = {
-  // };
   return <UIContext.Provider value={value}>{children}</UIContext.Provider>;
 };
 

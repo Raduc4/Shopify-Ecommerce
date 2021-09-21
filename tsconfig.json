@@ -17,6 +17,7 @@
     "paths": {
       "@common": ["framework/common"],
       "@common/*": ["framework/common/*"],
+      "@common/cart/*": ["framework/common/cart/*"],
       "@framework": ["framework/shopify"],
       "@framework/*": ["framework/shopify/*"],
       "@components/*": ["components/*"],

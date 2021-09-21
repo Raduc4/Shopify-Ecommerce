@@ -7,7 +7,7 @@ import { Grid, Hero, Marquee } from "@components/ui";
 
 export async function getStaticProps() {
   const config = getConfig();
-  console.log(config.apiUrl);
+
   const products = await getAllProducts(config);
   return {
     props: {
