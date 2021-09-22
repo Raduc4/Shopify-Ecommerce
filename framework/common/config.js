@@ -4,7 +4,7 @@ const merge = require("deepmerge");
 const prettier = require("prettier");
 
 const ALLOWED_FW = ["shopify", "bigcommerce", "shopify_local"];
-const FALLBACK_FW = ["shopify"];
+const FALLBACK_FW = "shopify";
 function withFrameworkConfig(defaultConfig = {}) {
   let framework = defaultConfig?.framework?.name;
 
