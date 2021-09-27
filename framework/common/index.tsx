@@ -18,8 +18,10 @@ export const ApiProvider: FC<ApiProviderProps> = ({
     return {
       fetcher: config.fetch,
       hooks,
+      checkoutId: config.checkoutCookie,
     };
-  }, [config.fetch]);
+  }, [config.fetch, hooks, config.checkoutCookie]);
+
   return (
     <ApiContext.Provider value={coreConfig}>{children}</ApiContext.Provider>
   );
