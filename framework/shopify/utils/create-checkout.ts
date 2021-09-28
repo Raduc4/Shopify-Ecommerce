@@ -18,7 +18,6 @@ const createCheckout = async (
   const checkoutId = checkout?.id;
 
   if (checkoutId) {
-    debugger;
     const options = {
       expires: SHOPIFY_COOKIE_EXPIRE,
     };
