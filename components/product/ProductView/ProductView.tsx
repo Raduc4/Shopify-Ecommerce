@@ -17,19 +17,21 @@ interface Props {
 const ProductView: FC<Props> = ({ product }) => {
   const [choices, setChoices] = useState<Choices>({});
 
+  const addItem = useAddItem();
   const { openSidebar } = useUI();
 
   const variant = getVariant(product, choices);
-  const addItem = useAddItem();
 
   const addToCart = async () => {
     try {
       const item = {
         productId: String(product.id),
-        variantId: variant?.id,
+        variantId: String(variant?.id),
         variantOptions: variant?.options,
+        quantity: 1,
       };
       const output = await addItem(item);
+      debugger;
       alert(JSON.stringify(output));
 
       openSidebar();
