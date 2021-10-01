@@ -10,7 +10,7 @@ import {
 } from "../schema";
 
 import { Product } from "@common/types/product";
-import { Cart } from "@common/types/cart";
+import { Cart, LineItem } from "@common/types/cart";
 
 export const normalizeCart = (checkout: Checkout): Cart => {
   return {
@@ -29,7 +29,7 @@ export const normalizeCart = (checkout: Checkout): Cart => {
 
 const normalizeLineItem = ({
   node: { id, title, variant, ...rest },
-}: CheckoutLineItemEdge): any => {
+}: CheckoutLineItemEdge): LineItem => {
   return {
     id,
     variantId: String(variant?.id),
@@ -37,16 +37,27 @@ const normalizeLineItem = ({
     name: title,
     path: variant?.product?.handle ?? "",
     discounts: [],
-    // TODO: options
+    options: variant?.selectedOptions.map(({ name, value }: SelectedOption) => {
+      const option = normalizeProductOption({
+        id,
+        name,
+        values: [value],
+      });
+
+      return option;
+    }),
     variant: {
       id: String(variant?.id),
       sku: variant?.sku ?? "",
       name: variant?.title,
-      // TODO: image
+      image: {
+        url:
+          process.env.NEXT_PUBLIC_FRAMEWORK === "shopify_local"
+            ? `/images/${variant?.image?.originalSrc}`
+            : variant?.image?.originalSrc ?? "/product-image-placeholder.svg",
+      },
       requiresShipping: variant?.requiresShipping ?? false,
-      // actual price
       price: variant?.priceV2.amount,
-      // base price
       listPrice: variant?.compareAtPriceV2?.amount,
     },
     ...rest,

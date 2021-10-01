@@ -1,15 +1,17 @@
 import { useApiProvider } from "@common";
 import { ApiFetcher } from "@common/types/api";
-import { ApiHooks } from "@common/types/hooks";
+import { ApiHooks, Hook } from "@common/types/hooks";
 import { MutationHook } from "@common/types/hooks";
-import { useState } from "react";
-export const useHook = (fn: (apiHooks: ApiHooks) => MutationHook) => {
+import useSWR from "swr";
+
+export const useHook = <H>(fn: (apiHooks: ApiHooks) => H) => {
   const { hooks } = useApiProvider();
   return fn(hooks);
 };
 
 export const useMutationHook = (hook: MutationHook) => {
   const { fetcher } = useApiProvider();
+
   return hook.useHook({
     fetch: (input: any) => {
       return hook.fetcher({
@@ -21,36 +23,35 @@ export const useMutationHook = (hook: MutationHook) => {
   });
 };
 
-const useData = (hook: any, fetcher: ApiFetcher) => {
-  const [data, setData] = useState(null);
-
-  const hookFetcher = async () => {
+const useData = (hook: any, fetcher: ApiFetcher, ctx: any) => {
+  const hookFetcher = async (query: string) => {
     try {
       return await hook.fetcher({
         fetch: fetcher,
-        options: hook.fetchOptions,
+        options: { query },
         input: {},
       });
-    } catch (err) {
-      throw err;
+    } catch (error) {
+      throw error;
     }
   };
 
-  if (!data) {
-    hookFetcher().then((data) => {
-      setData(data);
-    });
-    setData({ data: "Cart ready" } as any);
-  }
+  const response = useSWR(
+    hook.fetcherOptions.query,
+    hookFetcher,
+    ctx.swrOptions
+  );
 
-  return data;
+  return response;
 };
 
+// cache data first if possible
 export const useSWRHook = (hook: any) => {
   const { fetcher } = useApiProvider();
+
   return hook.useHook({
-    useData() {
-      const data = useData(hook, fetcher);
+    useData(ctx: any) {
+      const data = useData(hook, fetcher, ctx);
       return data;
     },
   });

@@ -9,8 +9,7 @@ const CartSidebar: FC = () => {
 
   const { closeSidebar } = useUI();
   const data = useCart();
-  debugger;
-  console.log(data);
+
   const rootClass = cn("h-full flex flex-col", {
     "bg-secondary text-secondary": isEmpty,
   });
