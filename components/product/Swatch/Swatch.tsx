@@ -7,6 +7,7 @@ import { isDark } from "@lib/color";
 import { Check } from "@components/icons";
 
 interface Props {
+  size?: "sm" | "md" | "lg";
   color?: string;
   label?: string;
   variant?: "size" | "color" | string;
@@ -14,7 +15,14 @@ interface Props {
   active?: boolean;
 }
 
-const Swatch: FC<Props> = ({ color, label, variant, active, ...rest }) => {
+const Swatch: FC<Props> = ({
+  color,
+  label,
+  variant,
+  active,
+  size = "md",
+  ...rest
+}) => {
   label = label?.toLowerCase();
   variant = variant?.toLowerCase();
 
@@ -23,6 +31,7 @@ const Swatch: FC<Props> = ({ color, label, variant, active, ...rest }) => {
     [s.color]: color,
     [s.size]: variant === "size",
     [s.dark]: color && isDark(color),
+    [s.sm]: size === "sm",
   });
   return (
     <button
